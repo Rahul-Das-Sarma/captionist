@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+  }
+}
+
+@layer components {
+  .app {
+    @apply min-h-screen;
+    background-color: #0B0B0B;
+    color: #F5F5F5;
+  }
+
+  .app-header {
+    @apply border-b p-6;
+    background-color: #1A1A1A;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .app-main {
+    @apply flex-1 p-6;
+  }
+
+  .app-footer {
+    @apply border-t p-4 text-center text-sm;
+    background-color: #1A1A1A;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #808080;
+  }
+
+  .upload-section {
+    @apply flex-1 flex items-center justify-center;
+  }
+
+  .upload-area {
+    @apply border-3 border-dashed border-gray-300 rounded-2xl p-16 bg-gray-50 transition-all duration-300 cursor-pointer relative overflow-hidden hover:border-blue-500 hover:bg-blue-50 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+}
