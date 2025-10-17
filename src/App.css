@@ -8,11 +8,11 @@
 
   body {
     @apply m-0 font-sans antialiased min-h-screen overflow-x-hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    background: #0B0B0B;
-    color: #F5F5F5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    background: #0b0b0b;
+    color: #f5f5f5;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -26,53 +26,68 @@
 @layer components {
   .app {
     @apply min-h-screen flex flex-col relative;
-    background: #0B0B0B;
+    background: #0b0b0b;
   }
 
   .app::before {
-    content: '';
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(0, 198, 255, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(58, 123, 213, 0.02) 0%, transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(0, 198, 255, 0.01) 0%, transparent 50%);
+    background: radial-gradient(
+        circle at 20% 50%,
+        rgba(0, 198, 255, 0.03) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(58, 123, 213, 0.02) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        rgba(0, 198, 255, 0.01) 0%,
+        transparent 50%
+      );
     pointer-events: none;
     z-index: -1;
   }
 
   .app-header {
-    @apply flex items-center justify-between px-8 py-6 border-b relative overflow-hidden;
-    background: linear-gradient(180deg, #0B0B0B 0%, #1A1A1A 100%);
+    @apply flex items-center justify-between px-8 py-3 border-b relative overflow-hidden;
+    background: linear-gradient(180deg, #0b0b0b 0%, #1a1a1a 100%);
     border-bottom-color: rgba(255, 255, 255, 0.1);
   }
 
   .app-header::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 pointer-events-none;
-    background: linear-gradient(45deg, transparent 30%, rgba(0, 198, 255, 0.02) 50%, transparent 70%);
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(0, 198, 255, 0.02) 50%,
+      transparent 70%
+    );
   }
 
   .app-header h1 {
     @apply text-3xl font-bold tracking-tight relative z-10 flex items-center gap-2;
-    color: #F5F5F5;
-    text-shadow: 
-      0 0 15px rgba(0, 198, 255, 0.3),
+    color: #f5f5f5;
+    text-shadow: 0 0 15px rgba(0, 198, 255, 0.3),
       0 0 30px rgba(0, 198, 255, 0.3);
   }
 
   .app-header h1::before {
-    content: '🎬';
+    content: "🎬";
     @apply inline-block text-2xl;
-    filter: drop-shadow(0 0 8px #00C6FF);
+    filter: drop-shadow(0 0 8px #00c6ff);
   }
 
   .app-header p {
     @apply text-base font-light tracking-wide relative z-10 hidden;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   .app-main {
@@ -86,22 +101,29 @@
 
   .upload-area {
     @apply border-2 border-dashed rounded-2xl py-16 px-12 text-center cursor-pointer transition-all duration-500 ease-out w-full max-w-lg min-w-80 relative overflow-hidden;
-    background: #1A1A1A;
+    background: #1a1a1a;
     border-color: rgba(0, 198, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .upload-area::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 198, 255, 0.02) 50%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(0, 198, 255, 0.02) 50%,
+      transparent 100%
+    );
   }
 
   .upload-area:hover {
     @apply -translate-y-2 scale-105;
-    background: #2A2A2A;
-    border-color: #00C6FF;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 198, 255, 0.2), inset 0 1px 0 rgba(0, 198, 255, 0.3);
+    background: #2a2a2a;
+    border-color: #00c6ff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 198, 255, 0.2),
+      inset 0 1px 0 rgba(0, 198, 255, 0.3);
   }
 
   .upload-area:hover::before {
@@ -110,7 +132,7 @@
 
   .upload-area svg {
     @apply mb-6 transition-all duration-300;
-    color: #00C6FF;
+    color: #00c6ff;
     filter: drop-shadow(0 0 8px rgba(0, 198, 255, 0.3));
   }
 
@@ -121,13 +143,13 @@
 
   .upload-area h3 {
     @apply mb-4 text-3xl font-semibold;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
   }
 
   .upload-area p {
     @apply text-lg leading-relaxed;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   .video-section {
@@ -136,33 +158,44 @@
 
   .video-container {
     @apply rounded-3xl p-6 border relative overflow-hidden;
-    background: #1A1A1A;
+    background: #1a1a1a;
     border-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2);
   }
 
   .video-container::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 pointer-events-none;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 198, 255, 0.01) 50%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(0, 198, 255, 0.01) 50%,
+      transparent 100%
+    );
   }
 
   .controls-section {
     @apply rounded-3xl p-10 border relative overflow-hidden;
-    background: #1A1A1A;
+    background: #1a1a1a;
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .controls-section::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 pointer-events-none;
-    background: linear-gradient(45deg, transparent 30%, rgba(0, 198, 255, 0.01) 50%, transparent 70%);
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(0, 198, 255, 0.01) 50%,
+      transparent 70%
+    );
   }
 
   .recording-controls h3 {
     @apply mb-8 text-2xl font-bold relative z-10;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
   }
 
@@ -170,17 +203,19 @@
     @apply flex gap-6 mb-8 flex-wrap relative z-10;
   }
 
-  .record-button, .generate-button {
+  .record-button,
+  .generate-button {
     @apply flex items-center gap-3 px-8 py-4 border rounded-xl font-semibold text-base cursor-pointer transition-all duration-500 ease-out min-w-44 justify-center relative overflow-hidden;
-    background: #2A2A2A;
-    color: #F5F5F5;
+    background: #2a2a2a;
+    color: #f5f5f5;
     border-color: rgba(0, 198, 255, 0.3);
   }
 
-  .record-button::before, .generate-button::before {
-    content: '';
+  .record-button::before,
+  .generate-button::before {
+    content: "";
     @apply absolute inset-0 opacity-0 transition-opacity duration-300 -z-10;
-    background: linear-gradient(135deg, #00C6FF, #3A7BD5);
+    background: linear-gradient(135deg, #00c6ff, #3a7bd5);
   }
 
   .record-button.start {
@@ -208,12 +243,14 @@
     @apply opacity-100;
   }
 
-  .record-button:hover, .generate-button:hover {
+  .record-button:hover,
+  .generate-button:hover {
     @apply -translate-y-1 scale-105 border-blue-400;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2);
   }
 
-  .record-button:disabled, .generate-button:disabled {
+  .record-button:disabled,
+  .generate-button:disabled {
     @apply opacity-40 cursor-not-allowed transform-none;
     border-color: rgba(255, 255, 255, 0.1);
   }
@@ -228,31 +265,37 @@
 
   .transcript-preview {
     @apply rounded-2xl p-8 mt-6 border relative z-10;
-    background: #2A2A2A;
+    background: #2a2a2a;
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .transcript-preview::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 pointer-events-none rounded-2xl;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 198, 255, 0.01) 50%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(0, 198, 255, 0.01) 50%,
+      transparent 100%
+    );
   }
 
   .transcript-preview h4 {
     @apply mb-6 text-xl font-bold relative z-10;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 8px rgba(0, 198, 255, 0.3);
   }
 
   .transcript-preview p {
     @apply mb-4 leading-loose text-lg relative z-10;
-    color: #F5F5F5;
+    color: #f5f5f5;
   }
 
   .transcript-preview .interim {
     @apply italic opacity-80;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   .transcript-stats {
@@ -261,25 +304,25 @@
 
   .confidence {
     @apply font-medium;
-    color: #00C6FF;
+    color: #00c6ff;
   }
 
   .processing-indicator {
     @apply animate-pulse;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   /* Video Transcription Styles */
   .video-transcription-controls {
     @apply mt-8 p-6 border rounded-xl relative z-10;
-    background: #2A2A2A;
+    background: #2a2a2a;
     border-color: rgba(0, 198, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.1);
   }
 
   .video-transcription-controls h4 {
     @apply text-xl font-bold mb-4;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
   }
 
@@ -289,9 +332,9 @@
 
   .transcribe-button {
     @apply flex items-center gap-3 px-6 py-3 border rounded-xl font-semibold cursor-pointer transition-all duration-500 ease-out relative overflow-hidden;
-    background: linear-gradient(135deg, #00C6FF, #3A7BD5);
+    background: linear-gradient(135deg, #00c6ff, #3a7bd5);
     border-color: rgba(0, 198, 255, 0.3);
-    color: #F5F5F5;
+    color: #f5f5f5;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2);
   }
 
@@ -302,12 +345,12 @@
 
   .transcribe-button:disabled {
     @apply opacity-50 cursor-not-allowed;
-    background: #2A2A2A;
+    background: #2a2a2a;
     border-color: rgba(255, 255, 255, 0.1);
   }
 
   .transcribe-button.stop {
-    background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     border-color: rgba(255, 107, 107, 0.3);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 107, 107, 0.2);
   }
@@ -318,53 +361,53 @@
 
   .progress-bar {
     @apply w-full h-2 rounded-full overflow-hidden mb-2;
-    background: #2A2A2A;
+    background: #2a2a2a;
   }
 
   .progress-fill {
     @apply h-full transition-all duration-300 ease-out;
-    background: linear-gradient(90deg, #00C6FF, #3A7BD5);
+    background: linear-gradient(90deg, #00c6ff, #3a7bd5);
     box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
   }
 
   .progress-text {
     @apply text-sm font-medium;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   .video-transcript-preview {
     @apply p-4 border rounded-lg relative z-10;
-    background: #1A1A1A;
+    background: #1a1a1a;
     border-color: rgba(0, 198, 255, 0.2);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   }
 
   .video-transcript-preview h4 {
     @apply text-lg font-bold mb-3;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
   }
 
   .video-transcript-preview p {
     @apply leading-loose text-base;
-    color: #F5F5F5;
+    color: #f5f5f5;
   }
 
   .language-detection-result {
     @apply flex items-center gap-2 mb-4 p-3 border rounded-lg;
-    background: #1A1A1A;
+    background: #1a1a1a;
     border-color: rgba(0, 198, 255, 0.3);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   }
 
   .language-label {
     @apply text-sm font-medium;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   .language-name {
     @apply font-bold;
-    color: #00C6FF;
+    color: #00c6ff;
     text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
   }
 
@@ -375,13 +418,13 @@
 
   .error-suggestions {
     @apply mt-4 p-4 border rounded-lg;
-    background: #1A1A1A;
+    background: #1a1a1a;
     border-color: rgba(255, 107, 107, 0.3);
   }
 
   .error-suggestions p {
     @apply font-semibold mb-2;
-    color: #FF6B6B;
+    color: #ff6b6b;
   }
 
   .error-suggestions ul {
@@ -390,14 +433,14 @@
 
   .error-suggestions li {
     @apply text-sm;
-    color: #B0B0B0;
+    color: #b0b0b0;
   }
 
   .retry-button {
     @apply px-4 py-2 border rounded-lg font-medium cursor-pointer transition-all duration-300;
-    background: linear-gradient(135deg, #00C6FF, #3A7BD5);
+    background: linear-gradient(135deg, #00c6ff, #3a7bd5);
     border-color: rgba(0, 198, 255, 0.3);
-    color: #F5F5F5;
+    color: #f5f5f5;
   }
 
   .retry-button:hover {
@@ -411,9 +454,9 @@
 
   .manual-button {
     @apply px-4 py-2 border rounded-lg font-medium cursor-pointer transition-all duration-300;
-    background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     border-color: rgba(255, 107, 107, 0.3);
-    color: #F5F5F5;
+    color: #f5f5f5;
   }
 
   .manual-button:hover {
@@ -430,25 +473,29 @@
     @apply flex gap-6 mb-6 flex-wrap;
   }
 
-  .settings-button, .download-button {
+  .settings-button,
+  .download-button {
     @apply flex items-center gap-3 px-8 py-4 border rounded-xl font-semibold cursor-pointer transition-all duration-500 ease-out relative overflow-hidden;
-    background: #2A2A2A;
-    color: #F5F5F5;
+    background: #2a2a2a;
+    color: #f5f5f5;
     border-color: rgba(0, 198, 255, 0.3);
   }
 
-  .settings-button::before, .download-button::before {
-    content: '';
+  .settings-button::before,
+  .download-button::before {
+    content: "";
     @apply absolute inset-0 opacity-0 transition-opacity duration-300 -z-10;
-    background: linear-gradient(135deg, #00C6FF, #3A7BD5);
+    background: linear-gradient(135deg, #00c6ff, #3a7bd5);
   }
 
-  .settings-button:hover, .download-button:hover {
+  .settings-button:hover,
+  .download-button:hover {
     @apply -translate-y-1 scale-105 border-blue-400;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2);
   }
 
-  .settings-button:hover::before, .download-button:hover::before {
+  .settings-button:hover::before,
+  .download-button:hover::before {
     @apply opacity-100;
   }
 
@@ -459,15 +506,21 @@
 
   .settings-panel {
     @apply rounded-2xl p-8 mt-6 border relative overflow-hidden;
-    background: #2A2A2A;
+    background: #2a2a2a;
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .settings-panel::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 pointer-events-none rounded-2xl;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 198, 255, 0.01) 50%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(0, 198, 255, 0.01) 50%,
+      transparent 100%
+    );
   }
 
   .setting-group {
@@ -480,14 +533,14 @@
 
   .setting-group label {
     @apply block mb-3 font-bold text-base;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 8px rgba(0, 198, 255, 0.3);
   }
 
   .setting-group select {
     @apply w-full p-4 border rounded-xl text-base font-medium transition-all duration-300;
-    background: #1A1A1A;
-    color: #F5F5F5;
+    background: #1a1a1a;
+    color: #f5f5f5;
     border-color: rgba(0, 198, 255, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
   }
@@ -499,21 +552,26 @@
 
   .setting-group select option {
     @apply p-2;
-    background: #1A1A1A;
-    color: #F5F5F5;
+    background: #1a1a1a;
+    color: #f5f5f5;
   }
 
   .app-footer {
-    @apply text-center py-12 px-4 text-base border-t relative overflow-hidden;
-    background: linear-gradient(180deg, #0B0B0B 0%, #000000 100%);
+    @apply text-center py-6 px-4 text-base border-t relative overflow-hidden;
+    background: linear-gradient(180deg, #0b0b0b 0%, #000000 100%);
     color: #808080;
     border-top-color: rgba(255, 255, 255, 0.1);
   }
 
   .app-footer::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 pointer-events-none;
-    background: linear-gradient(45deg, transparent 30%, rgba(0, 198, 255, 0.01) 50%, transparent 70%);
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(0, 198, 255, 0.01) 50%,
+      transparent 70%
+    );
   }
 
   .app-footer p {
@@ -526,8 +584,8 @@
 
   .caption-text {
     @apply font-sans tracking-wider uppercase font-bold border;
-    background: #0B0B0B !important;
-    color: #F5F5F5 !important;
+    background: #0b0b0b !important;
+    color: #f5f5f5 !important;
     border-color: rgba(0, 198, 255, 0.3) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2) !important;
     text-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
@@ -538,26 +596,28 @@
   }
 
   @keyframes reelPulse {
-    0%, 100% { 
+    0%,
+    100% {
       transform: scale(1);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2);
     }
-    50% { 
+    50% {
       transform: scale(1.05);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 198, 255, 0.3);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(0, 198, 255, 0.3);
     }
   }
 
   .video-player-container {
     @apply relative rounded-3xl overflow-hidden border;
-    background: #0B0B0B;
+    background: #0b0b0b;
     border-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 198, 255, 0.2);
   }
 
   .video-wrapper {
     @apply relative rounded-3xl overflow-hidden;
-    background: #0B0B0B;
+    background: #0b0b0b;
   }
 
   .video-controls {
@@ -567,27 +627,27 @@
 
   .progress-container input[type="range"] {
     @apply appearance-none h-2 rounded outline-none cursor-pointer border;
-    background: #2A2A2A;
+    background: #2a2a2a;
     border-color: rgba(255, 255, 255, 0.1);
   }
 
   .progress-container input[type="range"]::-webkit-slider-thumb {
     @apply appearance-none w-5 h-5 rounded-full cursor-pointer border-2;
-    background: #00C6FF;
-    border-color: #0B0B0B;
+    background: #00c6ff;
+    border-color: #0b0b0b;
     box-shadow: 0 0 10px rgba(0, 198, 255, 0.2);
   }
 
   .progress-container input[type="range"]::-moz-range-thumb {
     @apply w-5 h-5 rounded-full cursor-pointer border-2;
-    background: #00C6FF;
-    border-color: #0B0B0B;
+    background: #00c6ff;
+    border-color: #0b0b0b;
     box-shadow: 0 0 10px rgba(0, 198, 255, 0.2);
   }
 
   .controls-row {
     @apply flex items-center justify-between mt-4;
-    color: #F5F5F5;
+    color: #f5f5f5;
   }
 
   .left-controls {
@@ -600,7 +660,7 @@
 
   .time-display {
     @apply text-sm font-semibold;
-    color: #F5F5F5;
+    color: #f5f5f5;
     text-shadow: 0 0 8px rgba(0, 198, 255, 0.3);
   }
 }
@@ -610,40 +670,42 @@
   .app-header {
     @apply px-4 py-4 flex-col gap-2 text-center;
   }
-  
+
   .app-header h1 {
     @apply text-2xl;
   }
-  
+
   .app-header p {
     @apply text-sm block;
   }
-  
+
   .upload-area {
     @apply min-w-72 max-w-96 py-10 px-6;
   }
-  
+
   .recording-buttons {
     @apply flex-col gap-4;
   }
-  
-  .record-button, .generate-button {
+
+  .record-button,
+  .generate-button {
     @apply min-w-0 w-full;
   }
-  
+
   .caption-actions {
     @apply flex-col gap-4;
   }
-  
-  .settings-button, .download-button {
+
+  .settings-button,
+  .download-button {
     @apply w-full justify-center;
   }
-  
+
   .app-main {
     @apply px-6 py-6;
     min-height: calc(100vh - 100px);
   }
-  
+
   .video-section {
     @apply max-w-full;
   }
@@ -653,15 +715,15 @@
   .app-main {
     @apply px-2 py-4;
   }
-  
+
   .upload-area {
     @apply min-w-60 max-w-80 py-8 px-4;
   }
-  
+
   .app-header {
     @apply px-4 py-3;
   }
-  
+
   .app-header h1 {
     @apply text-xl;
   }
@@ -671,7 +733,7 @@
   .app-main {
     @apply max-w-7xl;
   }
-  
+
   .video-section {
     @apply max-w-5xl;
   }

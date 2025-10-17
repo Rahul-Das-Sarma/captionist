@@ -31,19 +31,21 @@ const VideoUploadSection: React.FC<VideoUploadSectionProps> = ({
             onChange={onFileUpload}
             className="hidden"
           />
-          <div className="text-6xl mb-6 drop-shadow-sm">🎬</div>
-          <h3 className="text-2xl font-semibold text-gray-600 mb-3">
-            Choose Your Video
-          </h3>
-          <p className="text-base text-gray-500 mb-5 leading-relaxed">
-            Click to browse or drag and drop your video file
-          </p>
-          <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-700">
-            <Upload size={20} />
-            Browse Files
-          </div>
-          <div className="mt-4 text-xs text-gray-400">
-            Supported formats: MP4, MOV, AVI, WebM
+          <div className="flex flex-col items-center text-center">
+            <div className="text-6xl mb-6 drop-shadow-sm">🎬</div>
+            <h3 className="text-2xl font-semibold text-gray-600 mb-3">
+              Choose Your Video
+            </h3>
+            <p className="text-base text-gray-500 mb-5 leading-relaxed">
+              Click to browse or drag and drop your video file
+            </p>
+            <div className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-700">
+              <Upload className="w-6 h-6 m-0" />
+              Browse Files
+            </div>
+            <div className="mt-4 text-xs text-gray-400">
+              Supported formats: MP4, MOV, AVI, WebM
+            </div>
           </div>
         </div>
       </div>
