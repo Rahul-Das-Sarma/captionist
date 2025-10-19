@@ -44,8 +44,8 @@ const VideoControls: React.FC<VideoControlsProps> = ({
       }}
     >
       {/* Control Buttons */}
-      <div className="flex items-center justify-between text-white">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between text-white flex-wrap gap-2">
+        <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
           <Button
             onClick={onTogglePlayPause}
             variant="default"
@@ -80,7 +80,7 @@ const VideoControls: React.FC<VideoControlsProps> = ({
           </div>
         </div>
 
-        <div className="text-sm font-medium text-white">
+        <div className="text-xs sm:text-sm font-medium text-white whitespace-nowrap">
           {formatTime(currentTime)} / {formatTime(duration)}
         </div>
 

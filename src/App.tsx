@@ -67,9 +67,9 @@ function App() {
           {!videoFile ? (
             <VideoUploadSection onFileUpload={handleFileUpload} />
           ) : (
-            <div className="flex flex-row gap-6 h-[calc(100vh-200px)] overflow-hidden p-5 items-start">
+            <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)] overflow-hidden p-5 items-start">
               {/* Video Player - Left Side */}
-              <div className="flex-1 min-w-[400px] max-w-[450px] h-full flex flex-col">
+              <div className="w-full lg:flex-1 lg:min-w-[300px] lg:max-w-[450px] h-full flex flex-col">
                 <VideoPlayer
                   videoUrl={videoUrl}
                   captions={captionGenerator.captions}
@@ -80,7 +80,7 @@ function App() {
               </div>
 
               {/* Controls - Right Side */}
-              <div className="flex w-full gap-4 h-[500px] overflow-y-auto p-0">
+              <div className="flex flex-col lg:flex-row w-full gap-4 h-[500px] overflow-y-auto p-0">
                 <ActionButtonsPanel
                   showSettings={showSettings}
                   onToggleSettings={handleToggleSettings}

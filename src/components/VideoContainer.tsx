@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import AnimatedCaption from "./AnimatedCaption";
 import { Play, Pause } from "lucide-react";
 
@@ -22,6 +22,7 @@ interface VideoContainerProps {
   onLoadedMetadata: () => void;
   onPlay: () => void;
   onPause: () => void;
+  onEnded: () => void;
   onTogglePlayPause: () => void;
 }
 
@@ -40,6 +41,7 @@ const VideoContainer = forwardRef<HTMLVideoElement, VideoContainerProps>(
       onLoadedMetadata,
       onPlay,
       onPause,
+      onEnded,
       onTogglePlayPause,
     },
     ref
@@ -48,8 +50,8 @@ const VideoContainer = forwardRef<HTMLVideoElement, VideoContainerProps>(
       <div
         className={`relative overflow-hidden ${
           isFullscreen
-            ? "rounded-none shadow-none h-[70vh]"
-            : "rounded-xl shadow-dark-primary bg-black/20 p-4 aspect-[9/16] max-h-[600px]"
+            ? "rounded-none shadow-none w-full h-full flex items-center justify-center bg-black"
+            : "rounded-xl shadow-dark-primary bg-black/20 p-2 aspect-[9/16] max-h-[80vh] w-full max-w-[400px] mx-auto"
         }`}
       >
         <video
@@ -59,9 +61,12 @@ const VideoContainer = forwardRef<HTMLVideoElement, VideoContainerProps>(
           onLoadedMetadata={onLoadedMetadata}
           onPlay={onPlay}
           onPause={onPause}
+          onEnded={onEnded}
           autoPlay={autoPlay}
-          className={`w-full h-full block rounded-lg object-cover ${
-            isFullscreen ? "object-contain" : ""
+          className={`block rounded-lg ${
+            isFullscreen
+              ? "max-w-full max-h-full object-contain"
+              : "w-full h-full object-cover"
           }`}
         />
 
