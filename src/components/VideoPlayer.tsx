@@ -67,19 +67,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         showCaption={showCaption}
         captionStyle={captionStyle}
         captionPosition={captionPosition}
+        isPlaying={isPlaying}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onPlay={handlePlay}
         onPause={handlePause}
+        onTogglePlayPause={togglePlayPause}
       />
 
       {showControls && (
-        <div
-          className="absolute bottom-0 left-0 right-0 p-5 z-10 rounded-b-xl"
-          style={{
-            background: "linear-gradient(transparent, rgba(0, 0, 0, 0.8))",
-          }}
-        >
+        <div className="absolute bottom-0 left-0 right-0 z-20">
           <ProgressBar
             currentTime={currentTime}
             duration={duration}

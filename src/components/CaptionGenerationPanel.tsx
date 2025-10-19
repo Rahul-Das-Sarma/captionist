@@ -8,6 +8,9 @@ interface CaptionGenerationPanelProps {
   onTranscriptChange: (value: string) => void;
   onSetMockTranscript: () => void;
   onGenerateCaptions: () => void;
+  onTranscribeVideo?: () => void;
+  useBackend?: boolean;
+  backendIntegration?: any;
 }
 
 const CaptionGenerationPanel: React.FC<CaptionGenerationPanelProps> = ({
@@ -18,6 +21,9 @@ const CaptionGenerationPanel: React.FC<CaptionGenerationPanelProps> = ({
   onTranscriptChange,
   onSetMockTranscript,
   onGenerateCaptions,
+  onTranscribeVideo,
+  useBackend = false,
+  backendIntegration,
 }) => {
   const srtInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,23 +87,64 @@ const CaptionGenerationPanel: React.FC<CaptionGenerationPanelProps> = ({
           placeholder="Paste your transcript here to generate captions..."
           className="w-full h-20 p-3 border border-dark-border-subtle rounded-xl text-sm resize-none bg-dark-bg-tertiary text-dark-text-primary placeholder-dark-text-muted focus:border-dark-accent-primary focus:outline-none transition-colors duration-300"
         />
-        <div className="mt-3 flex gap-2">
+
+        {/* Backend Status */}
+        {useBackend && backendIntegration && (
+          <div className="mt-2 text-xs text-gray-500">
+            {backendIntegration.isUploading && (
+              <span className="text-blue-500">📤 Uploading video...</span>
+            )}
+            {backendIntegration.isProcessing && (
+              <span className="text-yellow-500">⚙️ Processing...</span>
+            )}
+            {backendIntegration.error && (
+              <span className="text-red-500">
+                ❌ {backendIntegration.error}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="mt-3 flex gap-2 flex-wrap">
           <button
             onClick={onSetMockTranscript}
             className="px-4 py-2 bg-dark-bg-tertiary text-dark-text-primary border border-dark-border-subtle rounded-lg text-sm font-medium hover:bg-dark-bg-primary hover:border-dark-accent-primary transition-all duration-300"
           >
             Use Sample
           </button>
+
+          {useBackend && onTranscribeVideo && (
+            <button
+              onClick={onTranscribeVideo}
+              disabled={backendIntegration?.isProcessing}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                !backendIntegration?.isProcessing
+                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-dark-bg-tertiary text-dark-text-muted cursor-not-allowed"
+              }`}
+            >
+              {backendIntegration?.isProcessing
+                ? "Transcribing..."
+                : "🎤 Auto Transcribe"}
+            </button>
+          )}
+
           <button
             onClick={onGenerateCaptions}
-            disabled={!transcript.trim()}
+            disabled={
+              !transcript.trim() ||
+              (useBackend && backendIntegration?.isProcessing)
+            }
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-              transcript.trim()
+              transcript.trim() &&
+              !(useBackend && backendIntegration?.isProcessing)
                 ? "bg-dark-accent-primary text-white hover:bg-dark-accent-secondary shadow-dark-glow"
                 : "bg-dark-bg-tertiary text-dark-text-muted cursor-not-allowed"
             }`}
           >
-            Generate Captions
+            {useBackend && backendIntegration?.isProcessing
+              ? "Processing..."
+              : "Generate Captions"}
           </button>
         </div>
       </div>

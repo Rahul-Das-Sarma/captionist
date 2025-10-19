@@ -38,7 +38,7 @@ const VideoControls: React.FC<VideoControlsProps> = ({
 }) => {
   return (
     <div
-      className="absolute bottom-0 left-0 right-0 p-5 z-10 rounded-b-xl"
+      className="p-5 rounded-b-xl"
       style={{
         background: "linear-gradient(transparent, rgba(0, 0, 0, 0.8))",
       }}
