@@ -38,14 +38,14 @@ const VideoControls: React.FC<VideoControlsProps> = ({
 }) => {
   return (
     <div
-      className="absolute bottom-0 left-0 right-0 p-5 z-10 rounded-b-xl"
+      className="p-5 rounded-b-xl"
       style={{
         background: "linear-gradient(transparent, rgba(0, 0, 0, 0.8))",
       }}
     >
       {/* Control Buttons */}
-      <div className="flex items-center justify-between text-white">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between text-white flex-wrap gap-2">
+        <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
           <Button
             onClick={onTogglePlayPause}
             variant="default"
@@ -80,7 +80,7 @@ const VideoControls: React.FC<VideoControlsProps> = ({
           </div>
         </div>
 
-        <div className="text-sm font-medium text-white">
+        <div className="text-xs sm:text-sm font-medium text-white whitespace-nowrap">
           {formatTime(currentTime)} / {formatTime(duration)}
         </div>
 

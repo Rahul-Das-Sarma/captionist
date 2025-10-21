@@ -1,22 +1,26 @@
 import React from "react";
-import { Settings, Download } from "lucide-react";
+import { Settings, Download, Film } from "lucide-react";
 
 interface ActionButtonsPanelProps {
   showSettings: boolean;
   onToggleSettings: () => void;
   onDownloadCaptions: () => void;
+  onExportVideo: () => void;
   onCreateTestCaptions: () => void;
   captionsCount: number;
   isGenerating: boolean;
+  isExporting?: boolean;
 }
 
 const ActionButtonsPanel: React.FC<ActionButtonsPanelProps> = ({
   showSettings,
   onToggleSettings,
   onDownloadCaptions,
+  onExportVideo,
   onCreateTestCaptions,
   captionsCount,
   isGenerating,
+  isExporting,
 }) => {
   return (
     <div className="bg-dark-bg-secondary rounded-3xl p-6 mb-5 border border-dark-border-subtle shadow-dark-primary">
@@ -43,6 +47,19 @@ const ActionButtonsPanel: React.FC<ActionButtonsPanelProps> = ({
         >
           <Download size={16} />
           Download SRT
+        </button>
+
+        <button
+          onClick={onExportVideo}
+          disabled={captionsCount === 0 || isExporting}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+            captionsCount > 0 && !isExporting
+              ? "bg-indigo-600 text-white hover:bg-indigo-700 shadow-dark-glow"
+              : "bg-dark-bg-tertiary text-dark-text-muted cursor-not-allowed"
+          }`}
+        >
+          <Film size={16} />
+          {isExporting ? "Exporting..." : "Export Video"}
         </button>
 
         <button

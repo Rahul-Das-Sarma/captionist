@@ -7,6 +7,14 @@ interface AnimatedCaptionProps {
   duration?: number;
   style?: "reel" | "classic" | "bounce" | "slide";
   position?: "bottom" | "center" | "top";
+  theme?: {
+    fontSize: number;
+    fontFamily: string;
+    color: string;
+    backgroundColor: string;
+    padding: number;
+    borderRadius: number;
+  };
 }
 
 const AnimatedCaption: React.FC<AnimatedCaptionProps> = ({
@@ -14,6 +22,7 @@ const AnimatedCaption: React.FC<AnimatedCaptionProps> = ({
   isVisible,
   style = "reel",
   position = "bottom",
+  theme,
 }) => {
   const getAnimationVariants = () => {
     switch (style) {
@@ -120,11 +129,14 @@ const AnimatedCaption: React.FC<AnimatedCaptionProps> = ({
             }}
             className={`caption-text caption-${style}`}
             style={{
-              background: "rgba(0, 0, 0, 0.8)",
-              color: "white",
-              padding: "12px 24px",
-              borderRadius: "25px",
-              fontSize: "1.2rem",
+              background: theme?.backgroundColor ?? "rgba(0, 0, 0, 0.8)",
+              color: theme?.color ?? "white",
+              padding: theme
+                ? `${theme.padding}px ${theme.padding * 2}px`
+                : "12px 24px",
+              borderRadius: theme ? `${theme.borderRadius}px` : "25px",
+              fontSize: theme ? `${theme.fontSize / 16}rem` : "1.2rem",
+              fontFamily: theme?.fontFamily ?? undefined,
               fontWeight: "600",
               textAlign: "center",
               lineHeight: "1.4",
