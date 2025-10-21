@@ -95,6 +95,14 @@ const VideoContainer = forwardRef<HTMLVideoElement, VideoContainerProps>(
           isVisible={showCaption && !!currentCaption}
           style={captionStyle}
           position={captionPosition}
+          theme={{
+            fontSize: 24,
+            fontFamily: "Arial",
+            color: "#ffffff",
+            backgroundColor: "#000000",
+            padding: 10,
+            borderRadius: 5,
+          }}
         />
       </div>
     );

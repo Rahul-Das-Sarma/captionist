@@ -17,6 +17,7 @@ export const useAppState = () => {
   const [isUploadingSrt, setIsUploadingSrt] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [useBackend, setUseBackend] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const srtInputRef = useRef<HTMLInputElement>(null);
@@ -204,6 +205,63 @@ export const useAppState = () => {
     }
   }, [useBackend, backendIntegration, captionGenerator.captions]);
 
+  const handleExportVideo = useCallback(async () => {
+    if (!videoFile) return;
+
+    // Prefer backend export when enabled and we have a videoId
+    if (useBackend && backendIntegration.videoId) {
+      try {
+        setIsExporting(true);
+        const style = {
+          type: captionStyle,
+          position: captionPosition,
+          fontSize: 24,
+          fontFamily: "Arial",
+          color: "#ffffff",
+          backgroundColor: "#000000",
+          padding: 10,
+          borderRadius: 5,
+        } as const;
+
+        const { jobId } = await backendIntegration.exportVideo({
+          videoId: backendIntegration.videoId,
+          captions: captionGenerator.captions,
+          style,
+          output: {
+            format: "mp4",
+            codec: "h264",
+            quality: "high",
+          },
+        });
+
+        await backendIntegration.downloadExportedVideo(jobId);
+      } catch (error) {
+        console.error("❌ Backend export failed:", error);
+        const details =
+          (error instanceof Error && error.message) ||
+          backendIntegration.error ||
+          "Unknown error";
+        alert(
+          `Export failed: ${details}.\n\nQuick checks:\n- Is the backend running at VITE_API_URL?\n- Does it expose /api/export/burn-in, /api/export/status/:jobId, /api/export/:jobId/download?`
+        );
+      } finally {
+        setIsExporting(false);
+      }
+    } else {
+      // No backend path implemented for local burn-in
+      alert(
+        "Export requires backend. Enable 'Use Backend' and upload the video."
+      );
+    }
+  }, [
+    videoFile,
+    useBackend,
+    backendIntegration,
+    captionStyle,
+    captionPosition,
+    captionGenerator.captions,
+  ]);
+
   const downloadLocalCaptions = useCallback(() => {
     if (captionGenerator.captions.length > 0) {
       const srtContent = captionGenerator.captions
@@ -334,6 +392,7 @@ export const useAppState = () => {
     isUploadingSrt,
     transcript,
     useBackend,
+    isExporting,
     captionGenerator,
     backendIntegration,
 
@@ -347,6 +406,7 @@ export const useAppState = () => {
     handleSetMockTranscript,
     handleGenerateCaptions,
     handleDownloadCaptions,
+    handleExportVideo,
     handleToggleSettings,
     handleCaptionStyleChange,
     handleCaptionPositionChange,

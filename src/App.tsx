@@ -21,6 +21,7 @@ function App() {
     isUploadingSrt,
     transcript,
     useBackend,
+    isExporting,
     captionGenerator,
     backendIntegration,
     handleFileUpload,
@@ -28,6 +29,7 @@ function App() {
     handleSetMockTranscript,
     handleGenerateCaptions,
     handleDownloadCaptions,
+    handleExportVideo,
     handleToggleSettings,
     handleCaptionStyleChange,
     handleCaptionPositionChange,
@@ -85,11 +87,13 @@ function App() {
                   showSettings={showSettings}
                   onToggleSettings={handleToggleSettings}
                   onDownloadCaptions={handleDownloadCaptions}
+                  onExportVideo={handleExportVideo}
                   onCreateTestCaptions={() =>
                     captionGenerator.createTestCaptions()
                   }
                   captionsCount={captionGenerator.captions.length}
                   isGenerating={captionGenerator.isGenerating}
+                  isExporting={isExporting}
                 />
 
                 <CaptionGenerationPanel

@@ -257,9 +257,10 @@ export const useVideoPlayer = ({
 
   const toggleFullscreen = () => {
     if (videoRef.current) {
+      const container = videoRef.current.parentElement as HTMLElement | null;
       if (!document.fullscreenElement) {
-        // Enter fullscreen
-        videoRef.current
+        // Enter fullscreen on the container so overlays (captions/controls) remain visible
+        (container ?? videoRef.current)
           .requestFullscreen()
           .then(() => {
             setIsFullscreen(true);

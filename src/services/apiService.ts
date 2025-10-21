@@ -50,6 +50,29 @@ export interface CaptionStyle {
   borderRadius: number;
 }
 
+export interface CaptionExportRequest {
+  videoId: string;
+  captions: CaptionSegment[];
+  style: CaptionStyle;
+  output?: {
+    format?: "mp4" | "mov" | "webm";
+    codec?: "h264" | "h265" | "vp9" | "av1";
+    quality?: "low" | "medium" | "high";
+    resolution?: string; // e.g. "1080x1920"
+    fps?: number;
+  };
+}
+
+export interface CaptionExportResponse {
+  jobId: string;
+  status: "pending" | "processing" | "completed" | "failed";
+  progress: number;
+  url?: string; // available when completed
+  publicUrl?: string; // alternative name used by some backends
+  outputPath?: string; // optional internal path
+  error?: string;
+}
+
 export interface CaptionGenerationRequest {
   videoId: string;
   transcript: string;
@@ -82,6 +105,11 @@ export class ApiService {
 
   constructor() {
     this.baseUrl = API_BASE_URL;
+  }
+
+  // Expose base URL for constructing absolute links from relative publicUrl
+  getBaseUrl(): string {
+    return this.baseUrl;
   }
 
   private async makeRequest<T>(
@@ -174,6 +202,32 @@ export class ApiService {
   // Get generated captions
   async getCaptions(jobId: string): Promise<ApiResponse<CaptionSegment[]>> {
     return this.makeRequest(`/captions/${jobId}/captions`);
+  }
+
+  // Request export (burn-in) of video with captions
+  async exportVideoWithCaptions(
+    request: CaptionExportRequest
+  ): Promise<ApiResponse<CaptionExportResponse>> {
+    return this.makeRequest("/export/burn-in", {
+      method: "POST",
+      body: JSON.stringify(request),
+    });
+  }
+
+  // Get export status
+  getExportStatus = async (
+    jobId: string
+  ): Promise<ApiResponse<CaptionExportResponse>> => {
+    return this.makeRequest(`/export/status/${jobId}`);
+  };
+
+  // Download exported video
+  async downloadExport(jobId: string): Promise<Blob> {
+    const response = await fetch(`${this.baseUrl}/export/${jobId}/download`);
+    if (!response.ok) {
+      throw new Error(`Failed to download export: ${response.status}`);
+    }
+    return response.blob();
   }
 
   // Download captions as SRT

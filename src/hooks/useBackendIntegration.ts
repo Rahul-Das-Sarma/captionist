@@ -236,6 +236,113 @@ export const useBackendIntegration = () => {
     []
   );
 
+  const exportVideo = useCallback(
+    async (params: {
+      videoId: string;
+      captions: CaptionSegment[];
+      style: CaptionStyle;
+      output?: {
+        format?: "mp4" | "mov" | "webm";
+        codec?: "h264" | "h265" | "vp9" | "av1";
+        quality?: "low" | "medium" | "high";
+        resolution?: string;
+        fps?: number;
+      };
+    }) => {
+      setState((prev) => ({
+        ...prev,
+        isProcessing: true,
+        processingProgress: 0,
+        error: null,
+      }));
+
+      try {
+        const response = await apiService.exportVideoWithCaptions({
+          videoId: params.videoId,
+          captions: params.captions,
+          style: params.style,
+          output: params.output,
+        });
+
+        if (!response.success) {
+          throw new Error(response.error || "Export request failed");
+        }
+
+        const jobId = response.data?.jobId;
+        if (!jobId) {
+          throw new Error("No job ID returned from export request");
+        }
+
+        setState((prev) => ({ ...prev, currentJobId: jobId }));
+
+        const result = await apiService.pollJobStatus(
+          jobId,
+          apiService.getExportStatus,
+          (status) => {
+            setState((prev) => ({
+              ...prev,
+              processingProgress: status.progress || 0,
+            }));
+          }
+        );
+
+        setState((prev) => ({
+          ...prev,
+          isProcessing: false,
+          processingProgress: 100,
+        }));
+
+        return { jobId, result };
+      } catch (error) {
+        console.error("❌ Export failed:", error);
+        setState((prev) => ({
+          ...prev,
+          isProcessing: false,
+          processingProgress: 0,
+          error: error instanceof Error ? error.message : "Export failed",
+        }));
+        throw error;
+      }
+    },
+    []
+  );
+
+  const downloadExportedVideo = useCallback(async (jobId: string) => {
+    try {
+      // Prefer redirect if backend exposes a public URL; fall back to blob download
+      const status = await apiService.getExportStatus(jobId);
+      if (status.success && status.data) {
+        const publicUrl =
+          (status.data as any).publicUrl || (status.data as any).url;
+        if (publicUrl) {
+          const isAbsolute = /^(https?:)?\/\//i.test(publicUrl);
+          const base = apiService.getBaseUrl().replace(/\/$/, "");
+          const relative = publicUrl.startsWith("/")
+            ? publicUrl
+            : `/${publicUrl}`;
+          window.location.href = isAbsolute ? publicUrl : `${base}${relative}`;
+          return;
+        }
+      }
+
+      const blob = await apiService.downloadExport(jobId);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "video_with_captions.mp4";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("❌ Export download failed:", error);
+      setState((prev) => ({
+        ...prev,
+        error:
+          error instanceof Error ? error.message : "Export download failed",
+      }));
+      throw error;
+    }
+  }, []);
+
   const downloadCaptionsAsSRT = useCallback(async (jobId: string) => {
     try {
       console.log("📄 Downloading captions as SRT...", jobId);
@@ -279,6 +386,8 @@ export const useBackendIntegration = () => {
     uploadVideo,
     transcribeVideo,
     generateCaptions,
+    exportVideo,
+    downloadExportedVideo,
     downloadCaptionsAsSRT,
     setError,
     clearError,
