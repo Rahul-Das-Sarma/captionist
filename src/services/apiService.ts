@@ -48,6 +48,29 @@ export interface CaptionStyle {
   backgroundColor: string;
   padding: number;
   borderRadius: number;
+  // Animation properties
+  animationDuration?: number;
+  animationDelay?: number;
+  animationEasing?: string;
+  // Visual effects
+  shadowColor?: string;
+  shadowBlur?: number;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  // Additional styling
+  opacity?: number;
+  rotation?: number;
+  // Text shadow
+  textShadowColor?: string;
+  textShadowBlur?: number;
+  textShadowOffsetX?: number;
+  textShadowOffsetY?: number;
+  // Border
+  borderColor?: string;
+  borderWidth?: number;
+  // Backdrop filter
+  backdropBlur?: number;
+  fontWeight?: number;
 }
 
 export interface CaptionExportRequest {

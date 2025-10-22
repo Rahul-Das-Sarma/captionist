@@ -212,15 +212,39 @@ export const useAppState = () => {
     if (useBackend && backendIntegration.videoId) {
       try {
         setIsExporting(true);
+        // Match the React app's AnimatedCaption styling exactly
         const style = {
           type: captionStyle,
           position: captionPosition,
-          fontSize: 24,
+          fontSize: 19, // 1.2rem = 19.2px, rounded to 19
           fontFamily: "Arial",
           color: "#ffffff",
-          backgroundColor: "#000000",
-          padding: 10,
-          borderRadius: 5,
+          backgroundColor: "rgba(0, 0, 0, 0.8)", // Match React app's semi-transparent background
+          padding: 12, // Match React app's vertical padding
+          borderRadius: 25, // Match React app's border radius
+          // Animation properties
+          animationDuration: 500, // Match React app's 0.5s duration
+          animationDelay: 0,
+          animationEasing: "ease-out",
+          // Visual effects to match React app
+          shadowColor: "#000000",
+          shadowBlur: 8, // Match boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)"
+          shadowOffsetX: 0,
+          shadowOffsetY: 8,
+          // Additional styling
+          opacity: 0.95, // Match semi-transparent background
+          rotation: 0,
+          // Text shadow to match React app
+          textShadowColor: "#000000",
+          textShadowBlur: 4, // Match textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)"
+          textShadowOffsetX: 0,
+          textShadowOffsetY: 2,
+          // Border to match React app
+          borderColor: "rgba(255, 255, 255, 0.1)",
+          borderWidth: 1,
+          // Backdrop filter effect
+          backdropBlur: 10, // Match backdropFilter: "blur(10px)"
+          fontWeight: 600, // Match React app's fontWeight: "600"
         } as const;
 
         const { jobId } = await backendIntegration.exportVideo({
