@@ -18,6 +18,8 @@ export const useAppState = () => {
   const [transcript, setTranscript] = useState("");
   const [useBackend, setUseBackend] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
+  const [exportJobId, setExportJobId] = useState<string | null>(null);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const srtInputRef = useRef<HTMLInputElement>(null);
@@ -205,13 +207,46 @@ export const useAppState = () => {
     }
   }, [useBackend, backendIntegration, captionGenerator.captions]);
 
+  const handleDownloadExport = useCallback(
+    async (jobId: string) => {
+      try {
+        await backendIntegration.downloadExportedVideo(jobId);
+        setExportJobId(null); // Clear job ID after download
+      } catch (error) {
+        console.error("❌ Download failed:", error);
+        alert("Download failed. Please try again.");
+      }
+    },
+    [backendIntegration]
+  );
+
+  const handleExportComplete = useCallback((outputPath?: string) => {
+    console.log("✅ Export completed:", outputPath);
+    // Export is complete, user can download via the progress component
+  }, []);
+
+  const handleExportError = useCallback((error: string) => {
+    console.error("❌ Export error:", error);
+    setExportJobId(null); // Clear job ID on error
+    alert(`Export failed: ${error}`);
+  }, []);
+
+  const handleCloseExportModal = useCallback(() => {
+    console.log("🔄 Closing export modal");
+    setExportJobId(null);
+    setShowExportModal(false);
+  }, []);
+
   const handleExportVideo = useCallback(async () => {
     if (!videoFile) return;
+
+    // Show modal immediately when export starts
+    setShowExportModal(true);
+    setIsExporting(true);
 
     // Prefer backend export when enabled and we have a videoId
     if (useBackend && backendIntegration.videoId) {
       try {
-        setIsExporting(true);
         // Match the React app's AnimatedCaption styling exactly
         const style = {
           type: captionStyle,
@@ -258,16 +293,26 @@ export const useAppState = () => {
           },
         });
 
-        await backendIntegration.downloadExportedVideo(jobId);
+        // Set the job ID for progress tracking
+        console.log("🎬 Export started, setting jobId:", jobId);
+        setExportJobId(jobId);
+
+        // Don't wait for completion - let the progress component handle it
+        // The progress component will handle the download when ready
       } catch (error) {
         console.error("❌ Backend export failed:", error);
         const details =
           (error instanceof Error && error.message) ||
           backendIntegration.error ||
           "Unknown error";
-        alert(
-          `Export failed: ${details}.\n\nQuick checks:\n- Is the backend running at VITE_API_URL?\n- Does it expose /api/export/burn-in, /api/export/status/:jobId, /api/export/:jobId/download?`
-        );
+        const isTimeoutError =
+          details.includes("timeout") || details.includes("polling");
+        const errorMessage = isTimeoutError
+          ? `Export is taking longer than 30 minutes. This is unusual.\n\nTry:\n- Check your backend logs for processing status\n- Try with a smaller video file\n- Contact support if the issue persists`
+          : `Export failed: ${details}.\n\nQuick checks:\n- Is the backend running at VITE_API_URL?\n- Does it expose /api/export/burn-in, /api/export/status/:jobId, /api/export/:jobId/download?`;
+
+        alert(errorMessage);
+        setShowExportModal(false); // Hide modal on error
       } finally {
         setIsExporting(false);
       }
@@ -276,6 +321,7 @@ export const useAppState = () => {
       alert(
         "Export requires backend. Enable 'Use Backend' and upload the video."
       );
+      setShowExportModal(false); // Hide modal on error
     }
   }, [
     videoFile,
@@ -417,6 +463,8 @@ export const useAppState = () => {
     transcript,
     useBackend,
     isExporting,
+    exportJobId,
+    showExportModal,
     captionGenerator,
     backendIntegration,
 
@@ -431,6 +479,10 @@ export const useAppState = () => {
     handleGenerateCaptions,
     handleDownloadCaptions,
     handleExportVideo,
+    handleDownloadExport,
+    handleExportComplete,
+    handleExportError,
+    handleCloseExportModal,
     handleToggleSettings,
     handleCaptionStyleChange,
     handleCaptionPositionChange,

@@ -7,7 +7,9 @@ import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
 import { BackendStatus } from "./components/BackendStatus";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import ExportProgressModal from "./components/ExportProgressModal";
 import { useAppState } from "./hooks/useAppState";
+import { FileSizeDetector } from "./utils/fileSizeDetector";
 import "./App.css";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
     transcript,
     useBackend,
     isExporting,
+    exportJobId,
+    showExportModal,
     captionGenerator,
     backendIntegration,
     handleFileUpload,
@@ -30,6 +34,10 @@ function App() {
     handleGenerateCaptions,
     handleDownloadCaptions,
     handleExportVideo,
+    handleDownloadExport,
+    handleExportComplete,
+    handleExportError,
+    handleCloseExportModal,
     handleToggleSettings,
     handleCaptionStyleChange,
     handleCaptionPositionChange,
@@ -108,6 +116,28 @@ function App() {
                   useBackend={useBackend}
                   backendIntegration={backendIntegration}
                 />
+
+                {/* Export Progress Modal */}
+                {showExportModal && (
+                  <ExportProgressModal
+                    jobId={exportJobId}
+                    fileSize={(() => {
+                      // Try to get file size from video element
+                      const videoElement = document.querySelector("video");
+                      if (videoElement) {
+                        return FileSizeDetector.getFileSizeFromVideo(
+                          videoElement
+                        );
+                      }
+                      // Fallback to video file size if available
+                      return videoFile?.size || 0;
+                    })()}
+                    onComplete={handleExportComplete}
+                    onError={handleExportError}
+                    onDownload={handleDownloadExport}
+                    onClose={handleCloseExportModal}
+                  />
+                )}
 
                 {showSettings && (
                   <SettingsPanel

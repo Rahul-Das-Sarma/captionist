@@ -283,7 +283,9 @@ export const useBackendIntegration = () => {
               ...prev,
               processingProgress: status.progress || 0,
             }));
-          }
+          },
+          900, // 30 minutes timeout (900 * 2 seconds = 1800 seconds = 30 minutes)
+          2000 // 2 second intervals
         );
 
         setState((prev) => ({

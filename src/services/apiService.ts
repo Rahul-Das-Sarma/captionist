@@ -306,7 +306,7 @@ export class ApiService {
     jobId: string,
     getStatusFn: (jobId: string) => Promise<ApiResponse<T>>,
     onProgress?: (status: T) => void,
-    maxAttempts: number = 60,
+    maxAttempts: number = 900, // Increased to 900 (30 minutes: 900 * 2 seconds = 1800 seconds = 30 minutes)
     intervalMs: number = 2000
   ): Promise<T> {
     let attempts = 0;

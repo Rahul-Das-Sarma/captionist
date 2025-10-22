@@ -37,7 +37,7 @@ export const config = {
 
   // Polling Configuration
   defaultPollingInterval: 2000, // 2 seconds
-  maxPollingAttempts: 60, // 2 minutes total
+  maxPollingAttempts: 900, // 30 minutes total (900 * 2 seconds = 1800 seconds = 30 minutes)
 };
 
 // Helper function to check if backend is available
