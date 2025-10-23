@@ -8,8 +8,8 @@ import AppFooter from "./components/AppFooter";
 import { BackendStatus } from "./components/BackendStatus";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import ExportProgressModal from "./components/ExportProgressModal";
-import { useAppState } from "./hooks/useAppState";
 import { FileSizeDetector } from "./utils/fileSizeDetector";
+import { useAppState } from "./hooks/useAppState";
 import "./App.css";
 
 function App() {

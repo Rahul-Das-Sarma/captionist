@@ -101,7 +101,29 @@ export const useExportProgress = (): UseExportProgressReturn => {
       }
 
       console.log("📈 Progress data received:", data);
-      setProgress(data);
+      console.log("🔍 Data structure check:", {
+        hasId: "id" in data,
+        hasProgress: "progress" in data,
+        hasStatus: "status" in data,
+        idValue: data.id,
+        progressValue: data.progress,
+        statusValue: data.status,
+      });
+
+      // Map API response to ExportProgress interface
+      const mappedProgress = {
+        jobId: data.id || jobIdRef.current, // Use id from API or fallback to current jobId
+        status: data.status,
+        progress: data.progress,
+        message: data.message,
+        outputPath: data.outputPath,
+        error: data.error,
+        estimatedTimeRemaining: data.estimatedTimeRemaining,
+        processingSpeed: data.processingSpeed,
+      };
+
+      console.log("🔄 Setting progress to:", mappedProgress);
+      setProgress(mappedProgress);
       setError(null);
       retryCountRef.current = 0; // Reset retry count on success
 
@@ -157,33 +179,18 @@ export const useExportProgress = (): UseExportProgressReturn => {
         checkProgress().then(() => {
           if (!isPollingRef.current) return; // Double check
 
-          // Get current progress from state
-          setProgress((currentProgress) => {
-            if (!currentProgress) return null;
-
-            const currentStatus = currentProgress.status;
-            const currentProgressValue = currentProgress.progress;
-
-            if (currentStatus !== "completed" && currentStatus !== "failed") {
-              const interval = getPollingInterval(
-                currentProgressValue,
-                fileSizeRef.current
-              );
-              console.log(
-                `🔄 Next poll in ${interval}ms (progress: ${currentProgressValue}%, fileSize: ${fileSizeRef.current} bytes)`
-              );
-              timeoutRef.current = setTimeout(poll, interval);
-            }
-
-            return currentProgress;
-          });
+          // Schedule next poll with a simple interval
+          // The checkProgress function will handle stopping when completed/failed
+          const interval = 5000; // 5 seconds default
+          console.log(`🔄 Next poll in ${interval}ms`);
+          timeoutRef.current = setTimeout(poll, interval);
         });
       };
 
       // Start immediately
       poll();
     },
-    [stopPolling, checkProgress, getPollingInterval]
+    [stopPolling, checkProgress]
   );
 
   const reset = useCallback(() => {

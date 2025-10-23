@@ -41,7 +41,7 @@ const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
     return () => {
       stopPolling();
     };
-  }, [jobId, startPolling, stopPolling, reset]);
+  }, [jobId, fileSize, startPolling, stopPolling, reset]);
 
   // Handle completion
   useEffect(() => {
@@ -65,10 +65,16 @@ const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
     isPolling,
   });
 
+  // Additional debugging for progress updates
+  console.log("🔍 Progress details:", {
+    progressValue: progress?.progress,
+    progressStatus: progress?.status,
+    progressMessage: progress?.message,
+  });
+
   // Don't render if modal is not shown
-  if (!jobId && !isPolling) {
-    return null;
-  }
+  // Note: This component should only be rendered when showExportModal is true
+  // The parent component controls visibility, so we always render if we're here
 
   const getStatusColor = (status: ExportProgressType["status"]) => {
     switch (status) {
@@ -188,6 +194,11 @@ const ExportProgressModal: React.FC<ExportProgressModalProps> = ({
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-medium text-dark-text-secondary">
               {!jobId ? "0% complete" : `${progress?.progress || 0}% complete`}
+            </span>
+            {/* Debug info */}
+            <span className="text-xs text-gray-500">
+              Debug: jobId={!!jobId}, progress={progress?.progress}, status=
+              {progress?.status}
             </span>
             {progress?.processingSpeed && (
               <span className="text-sm text-dark-text-secondary">
