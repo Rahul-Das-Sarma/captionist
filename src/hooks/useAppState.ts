@@ -3,6 +3,9 @@ import useCaptionGenerator from "./useCaptionGenerator";
 import { useBackendIntegration } from "./useBackendIntegration";
 import { FileUploader, SRTParser } from "../utils/srtParser";
 
+// Import the new caption styling types
+import type { CaptionStyle } from "../components/CaptionStyling/types";
+
 export const useAppState = () => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -12,6 +15,73 @@ export const useAppState = () => {
   const [captionPosition, setCaptionPosition] = useState<
     "bottom" | "center" | "top"
   >("bottom");
+
+  // New comprehensive caption styling state
+  const [captionStyling, setCaptionStyling] = useState<CaptionStyle>({
+    typography: {
+      fontFamily: "Arial",
+      fontSize: 24,
+      fontWeight: "normal",
+      fontColor: "#ffffff",
+      textAlign: "center",
+      lineHeight: 1.2,
+      letterSpacing: 0,
+    },
+    position: {
+      type: "bottom",
+      customX: 0.5,
+      customY: 0.9,
+      margin: 20,
+    },
+    background: {
+      enabled: true,
+      color: "#000000",
+      opacity: 0.8,
+      padding: {
+        top: 12,
+        right: 16,
+        bottom: 12,
+        left: 16,
+      },
+      borderRadius: 25,
+      backdropBlur: 10,
+    },
+    border: {
+      enabled: true,
+      color: "rgba(255, 255, 255, 0.1)",
+      width: 1,
+      style: "solid",
+      radius: 25,
+    },
+    shadow: {
+      enabled: true,
+      color: "#000000",
+      blur: 8,
+      offsetX: 0,
+      offsetY: 8,
+      textShadow: {
+        enabled: true,
+        color: "#000000",
+        blur: 4,
+        offsetX: 0,
+        offsetY: 2,
+      },
+    },
+    animation: {
+      type: "fade",
+      duration: 500,
+      delay: 0,
+      easing: "ease-out",
+      scale: 1,
+      rotation: 0,
+    },
+    effects: {
+      opacity: 0.95,
+      scale: 1,
+      rotation: 0,
+    },
+  });
+
   const [showSettings, setShowSettings] = useState(false);
   const [srtFile, setSrtFile] = useState<File | null>(null);
   const [isUploadingSrt, setIsUploadingSrt] = useState(false);
@@ -101,6 +171,31 @@ export const useAppState = () => {
     setTranscript(mockTranscript);
   }, []);
 
+  const generateLocalCaptions = useCallback(() => {
+    if (!videoFile || !transcript.trim()) return;
+
+    const video = document.createElement("video");
+    video.src = videoUrl;
+    video.onloadedmetadata = () => {
+      const duration = video.duration;
+      console.log("📹 Video duration:", duration);
+      const captions = captionGenerator.generateCaptions(transcript, duration);
+      console.log("🎯 Local captions generated:", captions);
+      console.log("🎯 Current captions state:", captionGenerator.captions);
+    };
+
+    setTimeout(() => {
+      if (!video.duration) {
+        console.log("⚠️ Video metadata not loaded, using default duration");
+        const captions = captionGenerator.generateCaptions(transcript, 30);
+        console.log(
+          "🎯 Local captions generated with default duration:",
+          captions
+        );
+      }
+    }, 2000);
+  }, [videoFile, videoUrl, transcript, captionGenerator]);
+
   const handleGenerateCaptions = useCallback(async () => {
     console.log("🎬 Generate captions clicked", {
       hasVideoFile: !!videoFile,
@@ -160,33 +255,28 @@ export const useAppState = () => {
     backendIntegration,
     captionStyle,
     captionPosition,
-    captionGenerator,
+    generateLocalCaptions,
   ]);
 
-  const generateLocalCaptions = useCallback(() => {
-    if (!videoFile || !transcript.trim()) return;
+  const downloadLocalCaptions = useCallback(() => {
+    if (captionGenerator.captions.length > 0) {
+      const srtContent = captionGenerator.captions
+        .map((caption, index) => {
+          const startTime = formatSRTTime(caption.startTime);
+          const endTime = formatSRTTime(caption.endTime);
+          return `${index + 1}\n${startTime} --> ${endTime}\n${caption.text}\n`;
+        })
+        .join("\n");
 
-    const video = document.createElement("video");
-    video.src = videoUrl;
-    video.onloadedmetadata = () => {
-      const duration = video.duration;
-      console.log("📹 Video duration:", duration);
-      const captions = captionGenerator.generateCaptions(transcript, duration);
-      console.log("🎯 Local captions generated:", captions);
-      console.log("🎯 Current captions state:", captionGenerator.captions);
-    };
-
-    setTimeout(() => {
-      if (!video.duration) {
-        console.log("⚠️ Video metadata not loaded, using default duration");
-        const captions = captionGenerator.generateCaptions(transcript, 30);
-        console.log(
-          "🎯 Local captions generated with default duration:",
-          captions
-        );
-      }
-    }, 2000);
-  }, [videoFile, videoUrl, transcript, captionGenerator]);
+      const blob = new Blob([srtContent], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "captions.srt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  }, [captionGenerator.captions]);
 
   const handleDownloadCaptions = useCallback(async () => {
     if (useBackend && backendIntegration.currentJobId) {
@@ -205,7 +295,7 @@ export const useAppState = () => {
       // Use local caption download
       downloadLocalCaptions();
     }
-  }, [useBackend, backendIntegration, captionGenerator.captions]);
+  }, [useBackend, backendIntegration, downloadLocalCaptions]);
 
   const handleDownloadExport = useCallback(
     async (jobId: string) => {
@@ -332,26 +422,6 @@ export const useAppState = () => {
     captionGenerator.captions,
   ]);
 
-  const downloadLocalCaptions = useCallback(() => {
-    if (captionGenerator.captions.length > 0) {
-      const srtContent = captionGenerator.captions
-        .map((caption, index) => {
-          const startTime = formatSRTTime(caption.startTime);
-          const endTime = formatSRTTime(caption.endTime);
-          return `${index + 1}\n${startTime} --> ${endTime}\n${caption.text}\n`;
-        })
-        .join("\n");
-
-      const blob = new Blob([srtContent], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "captions.srt";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  }, [captionGenerator.captions]);
-
   const formatSRTTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -383,6 +453,17 @@ export const useAppState = () => {
     []
   );
 
+  // New comprehensive caption styling handlers
+  const handleCaptionStylingChange = useCallback((newStyling: CaptionStyle) => {
+    setCaptionStyling(newStyling);
+    console.log("🎨 Caption styling updated:", newStyling);
+  }, []);
+
+  const handlePresetSelect = useCallback((presetName: string) => {
+    console.log("🎨 Preset selected:", presetName);
+    // This will be handled by the CaptionStylingContainer component
+  }, []);
+
   const handleTranscriptChange = useCallback((value: string) => {
     setTranscript(value);
   }, []);
@@ -405,7 +486,10 @@ export const useAppState = () => {
         console.log("✅ Backend transcription completed:", result);
 
         // Extract the transcription result from the response
-        const transcriptText = result.result || result.transcript || "";
+        const transcriptText =
+          (result as { result?: string; transcript?: string }).result ||
+          (result as { result?: string; transcript?: string }).transcript ||
+          "";
         console.log("📝 Extracted transcript:", transcriptText);
         setTranscript(transcriptText);
 
@@ -449,7 +533,14 @@ export const useAppState = () => {
       // Use mock transcription for local mode
       handleSetMockTranscript();
     }
-  }, [videoFile, useBackend, backendIntegration, handleSetMockTranscript]);
+  }, [
+    videoFile,
+    useBackend,
+    backendIntegration,
+    handleSetMockTranscript,
+    captionGenerator,
+    videoUrl,
+  ]);
 
   return {
     // State
@@ -457,6 +548,7 @@ export const useAppState = () => {
     videoUrl,
     captionStyle,
     captionPosition,
+    captionStyling, // New comprehensive styling state
     showSettings,
     srtFile,
     isUploadingSrt,
@@ -486,6 +578,8 @@ export const useAppState = () => {
     handleToggleSettings,
     handleCaptionStyleChange,
     handleCaptionPositionChange,
+    handleCaptionStylingChange, // New comprehensive styling handler
+    handlePresetSelect, // New preset selection handler
     handleTranscriptChange,
     handleToggleBackend,
     handleTranscribeVideo,

@@ -18,6 +18,7 @@ function App() {
     videoUrl,
     captionStyle,
     captionPosition,
+    captionStyling,
     showSettings,
     srtFile,
     isUploadingSrt,
@@ -41,6 +42,8 @@ function App() {
     handleToggleSettings,
     handleCaptionStyleChange,
     handleCaptionPositionChange,
+    handleCaptionStylingChange,
+    handlePresetSelect,
     handleTranscriptChange,
     handleToggleBackend,
     handleTranscribeVideo,
@@ -143,8 +146,11 @@ function App() {
                   <SettingsPanel
                     captionStyle={captionStyle}
                     captionPosition={captionPosition}
+                    captionStyling={captionStyling}
                     onCaptionStyleChange={handleCaptionStyleChange}
                     onCaptionPositionChange={handleCaptionPositionChange}
+                    onCaptionStylingChange={handleCaptionStylingChange}
+                    onPresetSelect={handlePresetSelect}
                   />
                 )}
               </div>
